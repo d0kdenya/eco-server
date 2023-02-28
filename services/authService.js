@@ -42,7 +42,7 @@ class AuthService {
         throw ApiError.BadRequest(`Некорректная роль!`)
       }
     }
-    await mailService.sendActivationMail(email, `${process.env.API_URL}:${process.env.PORT}/api/auth/activate/${activationLink}`)
+    await mailService.sendActivationMail(email, `${ process.env.API_URL }/api/auth/activate/${activationLink}`)
 
     const userDto = new UserDto(user)
     const tokens = tokenService.generateTokens({...userDto})
