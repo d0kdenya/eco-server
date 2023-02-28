@@ -15,11 +15,6 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-app.use('/', (req, res) => {
-  res.json({
-    "message": "work"
-  })
-})
 app.use('/api', router)
 app.use('/api/profile/uploads/', authMiddleware, express.static(path.resolve(__dirname, 'uploads')))
 
