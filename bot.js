@@ -38,8 +38,6 @@ module.exports = bot => {
       return await bot.sendMessage(chatId, `Ну давай загрузим!`)
     }
 
-    console.log(msg.photo[0].file_id)
-
     let filePath = ''
 
     await axios.get(`https://api.telegram.org/bot${ process.env.BOT_TOKEN }/getFile?file_id=${ msg.photo[0].file_id }`)
