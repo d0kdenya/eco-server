@@ -56,4 +56,9 @@ module.exports = bot => {
 
     return bot.sendMessage(chatId, 'Я тебя не понимаю! Попробуй ещё раз!')
   })
+
+  bot.on('location', (msg) => {
+    console.log(msg.location.latitude)
+    console.log(msg.location.longitude)
+  })
 }
