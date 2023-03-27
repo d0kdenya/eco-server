@@ -1,3 +1,4 @@
+/*
 const userService = require('../services/userService')
 
 class UserController {
@@ -90,4 +91,4 @@ class UserController {
   }
 }
 
-module.exports = new UserController()
+module.exports = new UserController()*/

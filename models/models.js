@@ -52,6 +52,14 @@ const User = sequelize.define('user', {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },
+  authToken: {
+    type: DataTypes.STRING,
+    defaultValue: ''
+  },
+  chatId: {
+    type: DataTypes.STRING,
+    unique: true
+  },
   role: {
     type: DataTypes.STRING,
     defaultValue: "USER"

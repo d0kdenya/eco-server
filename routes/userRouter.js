@@ -1,3 +1,4 @@
+/*
 const Router = require('express')
 const userController = require("../controllers/userController");
 const roleMiddleware = require("../middlewares/roleMiddleware");
@@ -19,3 +20,4 @@ router.delete('/deleteProfilePhoto', roleMiddleware(['USER', 'ADMIN']), authMidd
 
 
 module.exports = router
+*/
