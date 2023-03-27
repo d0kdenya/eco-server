@@ -62,6 +62,8 @@ module.exports = bot => {
   })
 
   bot.on('location', async (msg) => {
+    console.log('msg: ', msg)
+
     const text = msg.text
     const chatId = msg.chat.id
 
