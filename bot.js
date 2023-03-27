@@ -38,7 +38,7 @@ module.exports = bot => {
       return await bot.sendMessage(chatId, `Ну давай загрузим!`)
     }
 
-    let filePath = ''
+    /*let filePath = ''
 
     await axios.get(`https://api.telegram.org/bot${ process.env.BOT_TOKEN }/getFile?file_id=${ msg.photo[0].file_id }`)
       .then(function (res) {
@@ -52,7 +52,7 @@ module.exports = bot => {
         })
     } else {
       console.log('GG WP!')
-    }
+    }*/
 
     return bot.sendMessage(chatId, 'Я тебя не понимаю! Попробуй ещё раз!')
   })
