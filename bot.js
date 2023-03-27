@@ -15,6 +15,10 @@ module.exports = bot => {
       description: 'Авторизация'
     },
     {
+      command: '/location',
+      description: 'Загрузить нарушение!'
+    },
+    {
       command: '/upload',
       description: 'Загрузить нарушение!'
     }
@@ -58,7 +62,11 @@ module.exports = bot => {
   })
 
   bot.on('location', (msg) => {
-    console.log(msg.location.latitude)
-    console.log(msg.location.longitude)
+    const text = msg.text
+
+    if (text === '/location') {
+      console.log(msg.location.latitude)
+      console.log(msg.location.longitude)
+    }
   })
 }
