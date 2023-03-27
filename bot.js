@@ -61,12 +61,14 @@ module.exports = bot => {
     return bot.sendMessage(chatId, 'Я тебя не понимаю! Попробуй ещё раз!')
   })
 
-  bot.on('location', (msg) => {
+  bot.on('location', async (msg) => {
     const text = msg.text
+    const chatId = msg.chat.id
 
     if (text === '/location') {
       console.log(msg.location.latitude)
       console.log(msg.location.longitude)
+      return await bot.sendMessage(chatId, `Твоя широта: ${ msg.location.latitude } и долгота: ${ msg.location.longitude }`)
     }
   })
 }
