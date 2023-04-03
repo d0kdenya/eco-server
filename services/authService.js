@@ -102,9 +102,7 @@ class AuthService {
         await User.update({ authToken: token }, { where: { id: user.id } })
 
         return {
-          ...tokens,
-          token,
-          user: userDto
+          token
         }
       }
       case 'GOVERNMENT': {
