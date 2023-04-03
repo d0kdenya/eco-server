@@ -1,4 +1,5 @@
 const { botOptions, botLocation } = require('./options')
+const { User } = require('./models/models')
 const axios = require('axios')
 
 module.exports = bot => {
@@ -6,7 +7,17 @@ module.exports = bot => {
     const text = msg.text
     const chatId = msg.chat.id
 
-    if (text === '/start auth') {
+    console.log('text: ', text)
+
+    if (text.split(' ')[0] === '/start') {
+      const token = text.split(' ')[1]
+
+      const user = await User.findOne({ where: { authToken: token } })
+
+      if (!user) {
+        return await bot.sendMessage(chatId, 'Ошибка авторизации!')
+      }
+      await User.update({ chatId }, { where: { id: user.id, authToken: token } })
       return await bot.sendMessage(chatId, 'Успешная авторизация!', botOptions)
     }
 
