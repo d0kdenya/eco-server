@@ -73,12 +73,10 @@ class AuthService {
     }
   }
 
-  async login(email, password, role, chatId) {
+  async login(email, password, role) {
     if (!role) {
       throw ApiError.BadRequest('Некорректная роль')
     }
-
-    console.log(`chatId: ${ chatId }`)
 
     switch (role) {
       case 'USER': {
@@ -99,10 +97,13 @@ class AuthService {
         const tokens = tokenService.generateTokens({...userDto})
         await tokenService.saveToken(userDto.id, tokens.refreshToken, role)
 
-        await User.update({ authToken: uuid.v4(), chatId }, { where: { id: user.id } })
+        const token = uuid.v4()
+
+        await User.update({ authToken: token }, { where: { id: user.id } })
 
         return {
           ...tokens,
+          token,
           user: userDto
         }
       }
