@@ -40,9 +40,9 @@ module.exports = bot => {
       await bot.sendMessage(chatId, `Тебя зовут ${ msg.from.first_name }!`)
       return await bot.sendMessage(chatId, 'Выбирай команду:', botOptions)
     } else if (data === '/login') {
-      return await bot.sendMessage(chatId, `Для авторизации перейди по ссылке ${ process.env.CLIENT_URL }login/${ chatId }`)
+      return await bot.sendMessage(chatId, `Для авторизации перейди по ссылке ${ process.env.CLIENT_URL }login/`)
     } else if (data === '/registration') {
-      return await bot.sendMessage(chatId, `Для регистрации перейди по ссылке ${ process.env.CLIENT_URL }register/${ chatId }`)
+      return await bot.sendMessage(chatId, `Для регистрации перейди по ссылке ${ process.env.CLIENT_URL }register/`)
     } else if (data === '/upload') {
       await bot.sendMessage(chatId, `Ну давай загрузим!`)
       return await bot.sendMessage(chatId, 'Выбирай команду:', botOptions)
