@@ -9,7 +9,7 @@ module.exports = bot => {
 
     console.log('text: ', text)
 
-    if (text.split(' ')[0] === '/start') {
+    if (text.length > 7 && text.split(' ')[0] === '/start') {
       const token = text.split(' ')[1]
 
       const user = await User.findOne({ where: { authToken: token } })
