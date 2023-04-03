@@ -78,6 +78,8 @@ class AuthService {
       throw ApiError.BadRequest('Некорректная роль')
     }
 
+    console.log(`chatId: ${ chatId }`)
+
     switch (role) {
       case 'USER': {
         const user = await User.findOne({where: {email}})
