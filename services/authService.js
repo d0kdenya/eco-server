@@ -27,7 +27,7 @@ class AuthService {
 
     switch (role) {
       case 'USER': {
-        user = await User.create({email, password: hashPassword, role: 'USER', activationLink})
+        user = await User.create({email, password: hashPassword, role: 'USER', activationLink })
         break
       }
       case 'GOVERNMENT': {
@@ -73,7 +73,7 @@ class AuthService {
     }
   }
 
-  async login(email, password, role) {
+  async login(email, password, role, chatId) {
     if (!role) {
       throw ApiError.BadRequest('Некорректная роль')
     }
@@ -96,6 +96,8 @@ class AuthService {
         const userDto = new UserDto(user)
         const tokens = tokenService.generateTokens({...userDto})
         await tokenService.saveToken(userDto.id, tokens.refreshToken, role)
+
+        await User.update({ authToken: uuid.v4(), chatId }, { where: { id: user.id } })
 
         return {
           ...tokens,
