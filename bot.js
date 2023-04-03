@@ -6,10 +6,11 @@ module.exports = bot => {
     const text = msg.text
     const chatId = msg.chat.id
 
-    console.log('text: ', text)
-    console.log('chatId: ', chatId)
+    if (text === '/start auth') {
+      return await bot.sendMessage(chatId, 'Успешная авторизация!', botOptions)
+    }
 
-    await bot.sendMessage(chatId, 'Выбирай команду:', botOptions)
+    return await bot.sendMessage(chatId, 'Выбирай команду:', botOptions)
   })
 
   bot.on('callback_query', async msg => {
@@ -28,11 +29,9 @@ module.exports = bot => {
       await bot.sendMessage(chatId, `Тебя зовут ${ msg.from.first_name }!`)
       return await bot.sendMessage(chatId, 'Выбирай команду:', botOptions)
     } else if (data === '/login') {
-      await bot.sendMessage(chatId, `Для авторизации перейди по ссылке ${ process.env.CLIENT_URL }login/${ chatId }`)
-      return await bot.sendMessage(chatId, 'Выбирай команду:', botOptions)
+      return await bot.sendMessage(chatId, `Для авторизации перейди по ссылке ${ process.env.CLIENT_URL }login/${ chatId }`)
     } else if (data === '/registration') {
-      await bot.sendMessage(chatId, `Для регистрации перейди по ссылке ${ process.env.CLIENT_URL }registration/${ chatId }`)
-      return await bot.sendMessage(chatId, 'Выбирай команду:', botOptions)
+      return await bot.sendMessage(chatId, `Для регистрации перейди по ссылке ${ process.env.CLIENT_URL }register/${ chatId }`)
     } else if (data === '/upload') {
       await bot.sendMessage(chatId, `Ну давай загрузим!`)
       return await bot.sendMessage(chatId, 'Выбирай команду:', botOptions)
