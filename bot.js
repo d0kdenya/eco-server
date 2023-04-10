@@ -19,6 +19,17 @@ module.exports = bot => {
       await User.update({ chatId }, { where: { id: user.id, authToken: token } })
       return await bot.sendMessage(chatId, 'Успешная авторизация!', botOptions)
     }
+
+    if (msg?.photo) {
+      const image = msg.photo[msg.photo.length - 1].file_id ? await bot.getFile(msg.photo[msg.photo.length - 1].file_id) : ''
+
+      if (!image) {
+        return await bot.sendMessage(chatId, 'Ошибка загрузки изображения!', botOptions)
+      }
+      const user = await User.findOne({ where: { chatId: chatId } })
+      await Violation.create({ file: `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}/${image.file_path}`, userId: user.id })
+      return createViolation(chatId)
+    }
   })
 
   bot.on('callback_query', async msg => {
@@ -44,18 +55,6 @@ module.exports = bot => {
       return await bot.sendMessage(chatId, `Для регистрации перейди по ссылке ${ process.env.CLIENT_URL }register/`)
     } else if (data === '/upload') {
       await bot.sendMessage(chatId, 'Для начала загрузи свой файлик!')
-      bot.on('message', async (msg) => {
-        if (!msg?.photo) return
-
-        const image = msg.photo[msg.photo.length - 1].file_id ? await bot.getFile(msg.photo[msg.photo.length - 1].file_id) : ''
-
-        if (!image) {
-          return await bot.sendMessage(chatId, 'Ошибка загрузки изображения!', botOptions)
-        }
-        const user = await User.findOne({ where: { chatId: chatId } })
-        await Violation.create({ file: `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}/${image.file_path}`, userId: user.id })
-        return createViolation(chatId)
-      })
     } else if (data === '/commands') {
       return await bot.sendMessage(chatId, 'Выбирай команду:', botOptions)
     } else if (data === '/name') {
