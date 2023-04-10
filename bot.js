@@ -33,6 +33,11 @@ module.exports = bot => {
       await Violation.update({ name: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
       return await bot.sendMessage(chatId, 'Успешно задали имя!', violationOptions)
     }
+
+    if (msg.data === '/description') {
+      await Violation.update({ description: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
+      return await bot.sendMessage(chatId, 'Успешно задали описание!', violationOptions)
+    }
   })
 
   bot.on('callback_query', async msg => {
@@ -77,11 +82,7 @@ module.exports = bot => {
       if (violation[violation.length - 1].description) {
         return await bot.sendMessage(chatId, 'Ошибка! Описание уже задано!', violationOptions)
       }
-      await bot.sendMessage(chatId, 'Введите описание:')
-      bot.on('message', async (msg) => {
-        await Violation.update({ description: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
-        return await bot.sendMessage(chatId, 'Успешно задали описание!', violationOptions)
-      })
+      return await bot.sendMessage(chatId, 'Введите описание:')
     } else if (data === '/location') {
       const user = await User.findOne({ where: { chatId } })
       const violation = await Violation.findAll({ where: { userId: user.id }, order: ['id'] })
