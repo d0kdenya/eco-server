@@ -47,18 +47,12 @@ module.exports = bot => {
     } else if (data === '/upload') {
       await bot.sendMessage(chatId, 'Для начала загрузи свой файлик!')
       bot.on('message', async (msg) => {
-        console.log('msg: ', msg)
         const image = msg.photo[2].file_id ? await bot.getFile(msg.photo[2].file_id) : ''
 
         if (!image) {
           return await bot.sendMessage(chatId, 'Ошибка загрузки изображения!', botOptions)
         }
-        console.log('image: ', image)
-        console.log('chatId: ', chatId)
-        console.log('typeof: ', typeof chatId)
-        console.log('typeof: ', typeof String(chatId))
-        const user = await User.findOne({ where: { chatId: String(chatId) } })
-        console.log('user: ', user)
+        const user = await User.findOne({ where: { chatId: chatId } })
         await Violation.create({ file: `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}/${image.file_path}`, userId: user.id })
         return createViolation(chatId)
       })

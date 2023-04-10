@@ -57,7 +57,7 @@ const User = sequelize.define('user', {
     defaultValue: ''
   },
   chatId: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
     unique: true
   },
   role: {
