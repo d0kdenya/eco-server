@@ -8,6 +8,7 @@ const router = require('./routes/index')
 const cookieParser = require('cookie-parser')
 const authMiddleware = require('./middlewares/authMiddleware')
 const errorMiddleware = require('./middlewares/errorHandlingMiddleware')
+const initializationService = require('./services/initializationService')
 const path = require('path')
 const botFunc = require('./bot')
 
@@ -31,6 +32,8 @@ const start = async () => {
   try {
     await sequelize.authenticate()
     await sequelize.sync()
+    await initializationService.initializeGarbageClass()
+
     await botFunc(bot)
     app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
   } catch (e) {

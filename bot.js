@@ -1,4 +1,4 @@
-const { botOptions, violationOptions } = require('./options')
+const { botOptions, violationOptions, garbageLocation } = require('./options')
 const { User, Violation } = require('./models/models')
 
 module.exports = bot => {
@@ -84,12 +84,36 @@ module.exports = bot => {
       bot.on('location', async (msg) => {
         const chatId = msg.chat.id
         await bot.sendMessage(chatId, `Твоя широта: ${ msg.location.latitude } и долгота: ${ msg.location.longitude }`)
+
         await Violation.update({
           latitude: msg.location.latitude,
-          longitude: msg.location.longitude
+          longitude: msg.location.longitude,
+          garbageClassId: violation[violation.length - 1].garbageClassId ? violation[violation.length - 1].garbageClassId : 4
         }, { where: { userId: user.id, id: violation[violation.length - 1].id }})
         return await bot.sendMessage(chatId, 'Успешно задали геолокацию!', botOptions)
       })
+    } else if (data === '/class') {
+      return await bot.sendMessage(chatId, 'Окей, выбирай класс!', garbageLocation)
+    } else if (data === '/household') {
+      const user = await User.findOne({ where: { chatId } })
+      const violation = await Violation.findAll({ where: { userId: user.id }, order: ['id'] })
+      await Violation.update({ garbageClassId: 1 }, { where: { userId: user.id, id: violation[violation.length - 1].id }})
+      return await bot.sendMessage(chatId, 'Успешно выбрали класс!', botOptions)
+    } else if (data === '/special') {
+      const user = await User.findOne({ where: { chatId } })
+      const violation = await Violation.findAll({ where: { userId: user.id }, order: ['id'] })
+      await Violation.update({ garbageClassId: 2 }, { where: { userId: user.id, id: violation[violation.length - 1].id }})
+      return await bot.sendMessage(chatId, 'Успешно выбрали класс!', botOptions)
+    } else if (data === '/industrial') {
+      const user = await User.findOne({ where: { chatId } })
+      const violation = await Violation.findAll({ where: { userId: user.id }, order: ['id'] })
+      await Violation.update({ garbageClassId: 3 }, { where: { userId: user.id, id: violation[violation.length - 1].id }})
+      return await bot.sendMessage(chatId, 'Успешно выбрали класс!', botOptions)
+    } else if (data === '/other') {
+      const user = await User.findOne({ where: { chatId } })
+      const violation = await Violation.findAll({ where: { userId: user.id }, order: ['id'] })
+      await Violation.update({ garbageClassId: 4 }, { where: { userId: user.id, id: violation[violation.length - 1].id }})
+      return await bot.sendMessage(chatId, 'Успешно выбрали класс!', botOptions)
     } else {
       await bot.sendMessage(chatId, 'Я тебя не понимаю! Попробуй ещё раз!')
       return await bot.sendMessage(chatId, 'Выбирай команду:', botOptions)

@@ -12,18 +12,20 @@ module.exports = {
         })
     },
 
-    // botLocation: {
-    //     reply_markup: JSON.stringify({
-    //         inline_keyboard: [
-    //             [{text: 'Скинуть геолокацию', callback_data: '/location'}]
-    //         ]
-    //     })
-    // },
+    garbageLocation: {
+         reply_markup: JSON.stringify({
+             inline_keyboard: [
+                 [{text: 'Бытовой мусор', callback_data: '/household'}, {text: 'Спецотходы', callback_data: '/special'}],
+                 [{text: 'Промышленный мусор', callback_data: '/industrial'}, {text: 'Другой', callback_data: '/other'}],
+             ]
+         })
+    },
 
     violationOptions: {
         reply_markup: JSON.stringify({
             inline_keyboard: [
                 [{text: 'Ввести название и описание нарушения', callback_data: '/name'}],
+                [{text: 'Добавить классификацию мусора', callback_data: '/class'}],
                 [{text: 'Скинуть геолокацию', callback_data: '/location'}],
             ]
         })

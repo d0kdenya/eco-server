@@ -191,6 +191,10 @@ const Violation = sequelize.define('violations', {
     type: DataTypes.ENUM('waiting', 'accepted', 'rejected'),
     defaultValue: 'waiting'
   },
+  isAcceptedClass: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  }
 })
 
 const Departments = sequelize.define('departments', {
@@ -228,6 +232,17 @@ const Departments = sequelize.define('departments', {
   },
 })
 
+const GarbageClass = sequelize.define('garbageClass', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  name: {
+    type: DataTypes.STRING
+  }
+})
+
 User.hasOne(Token)
 Token.belongsTo(User)
 
@@ -240,6 +255,9 @@ Token.belongsTo(Admin)
 User.hasOne(Violation)
 Violation.belongsTo(User)
 
+GarbageClass.hasOne(Violation)
+Violation.belongsTo(GarbageClass)
+
 Departments.hasOne(Government)
 Government.belongsTo(Departments)
 
@@ -249,5 +267,6 @@ module.exports = {
   Token,
   Admin,
   Violation,
-  Departments
+  Departments,
+  GarbageClass
 }
