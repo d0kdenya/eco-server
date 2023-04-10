@@ -42,12 +42,8 @@ class GovernmentService {
         ]
       }
     })
-
-    console.log('violations: ', violations)
-
-
     return violations.map(async violation => {
-      const garbage = await GarbageClass.findOne({where: { garbageClassId: violation.garbageClassId }})
+      const garbage = await GarbageClass.findOne({where: { id: violation.garbageClassId }})
       return new ViolationsDto(violation, garbage)
     })
   }
