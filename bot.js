@@ -3,8 +3,6 @@ const { User, Violation } = require('./models/models')
 
 module.exports = bot => {
   bot.on('message', async msg => {
-    console.log('msg: ', msg)
-
     const text = msg.text
     const chatId = msg.chat.id
 
@@ -30,13 +28,16 @@ module.exports = bot => {
       await Violation.create({ file: `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}/${image.file_path}`, userId: user.id })
       return createViolation(chatId)
     }
+
+    if (msg.data === '/name') {
+      await Violation.update({ name: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
+      return await bot.sendMessage(chatId, 'Успешно задали имя!', violationOptions)
+    }
   })
 
   bot.on('callback_query', async msg => {
     const data = msg.data
     const chatId = msg.message.chat.id
-
-    console.log('msg: ', msg)
 
     if (data === '/start') {
       await bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/6da/2f4/6da2f40d-a9d2-41a1-8f33-b816439ffe73/192/12.webp')
@@ -54,7 +55,7 @@ module.exports = bot => {
     } else if (data === '/registration') {
       return await bot.sendMessage(chatId, `Для регистрации перейди по ссылке ${ process.env.CLIENT_URL }register/`)
     } else if (data === '/upload') {
-      await bot.sendMessage(chatId, 'Для начала загрузи свой файлик!')
+      return await bot.sendMessage(chatId, 'Для начала загрузи свой файлик!')
     } else if (data === '/commands') {
       return await bot.sendMessage(chatId, 'Выбирай команду:', botOptions)
     } else if (data === '/name') {
@@ -66,11 +67,7 @@ module.exports = bot => {
       if (violation[violation.length - 1].name) {
         return await bot.sendMessage(chatId, 'Ошибка! Имя уже задано!', violationOptions)
       }
-      await bot.sendMessage(chatId, 'Введите имя:')
-      bot.on('message', async (msg) => {
-        await Violation.update({ name: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
-        return await bot.sendMessage(chatId, 'Успешно задали имя!', violationOptions)
-      })
+      return await bot.sendMessage(chatId, 'Введите имя:')
     } else if (data === '/description') {
       const user = await User.findOne({ where: { chatId } })
       const violation = await Violation.findAll({ where: { userId: user.id }, order: ['id'] })
