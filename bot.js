@@ -65,6 +65,7 @@ module.exports = bot => {
         return await bot.sendMessage(chatId, 'Ошибка! Описание уже задано!', violationOptions)
       }
       await bot.sendMessage(chatId, 'Введите имя и описание (Каждое с новой строчки):')
+      console.log('violationOptions: ', violationOptions)
       bot.on('message', async msg => {
         await Violation.update({ name: msg.text.split('\n')[0], description: msg.text.split('\n')[1] }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
         return await bot.sendMessage(chatId, 'Успешно задали имя и описание для нарушения!', violationOptions)
