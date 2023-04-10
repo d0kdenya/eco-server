@@ -23,7 +23,6 @@ module.exports = bot => {
     const data = msg.data
     const chatId = msg.message.chat.id
 
-    bot.on('message', async (msg) => {
     if (data === '/start') {
       await bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/6da/2f4/6da2f40d-a9d2-41a1-8f33-b816439ffe73/192/12.webp')
       await bot.sendMessage(chatId, `Добро пожаловать в телеграм бот: 'Экологический Проект'`)
@@ -41,7 +40,8 @@ module.exports = bot => {
       return await bot.sendMessage(chatId, `Для регистрации перейди по ссылке ${ process.env.CLIENT_URL }register/`)
     } else if (data === '/upload') {
       await bot.sendMessage(chatId, 'Для начала загрузи свой файлик!')
-      bot.on('message', async (msg) => {
+      console.log('msg upload: ', msg)
+      bot.on('message ', async (msg) => {
         if (!msg?.photo) return
 
         const image = msg.photo[msg.photo.length - 1].file_id ? await bot.getFile(msg.photo[msg.photo.length - 1].file_id) : ''
@@ -65,12 +65,11 @@ module.exports = bot => {
         return await bot.sendMessage(chatId, 'Ошибка! Имя уже задано!', violationOptions)
       }
       await bot.sendMessage(chatId, 'Введите имя:')
-      if (msg) {
+      console.log('msg name: ', msg)
+      bot.on('message', async (msg) => {
         await Violation.update({ name: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
         return await bot.sendMessage(chatId, 'Успешно задали имя!', violationOptions)
-      } else {
-        return await bot.sendMessage(chatId, 'Я тебя не понимаю! Попробуй ещё раз!', violationOptions)
-      }
+      })
     } else if (data === '/description') {
       const user = await User.findOne({ where: { chatId } })
       const violation = await Violation.findAll({ where: { userId: user.id }, order: ['id'] })
@@ -81,17 +80,11 @@ module.exports = bot => {
         return await bot.sendMessage(chatId, 'Ошибка! Описание уже задано!', violationOptions)
       }
       await bot.sendMessage(chatId, 'Введите описание:')
-      if (msg) {
-        await Violation.update({description: msg.text}, {
-          where: {
-            userId: user.id,
-            id: violation[violation.length - 1].id
-          }
-        })
+      console.log('msg description: ', msg)
+      bot.on('message', async (msg) => {
+        await Violation.update({ description: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
         return await bot.sendMessage(chatId, 'Успешно задали описание!', violationOptions)
-      } else {
-        return await bot.sendMessage(chatId, 'Я тебя не понимаю! Попробуй ещё раз!', violationOptions)
-      }
+      })
     } else if (data === '/location') {
       const user = await User.findOne({ where: { chatId } })
       const violation = await Violation.findAll({ where: { userId: user.id }, order: ['id'] })
@@ -114,7 +107,7 @@ module.exports = bot => {
     } else {
       await bot.sendMessage(chatId, 'Я тебя не понимаю! Попробуй ещё раз!')
       return await bot.sendMessage(chatId, 'Выбирай команду:', botOptions)
-    }})
+    }
   })
 
   const createViolation = async (chatId, url) => {
