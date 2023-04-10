@@ -101,22 +101,22 @@ module.exports = bot => {
       const user = await User.findOne({ where: { chatId } })
       const violation = await Violation.findAll({ where: { userId: user.id }, order: ['id'] })
       await Violation.update({ garbageClassId: 1 }, { where: { userId: user.id, id: violation[violation.length - 1].id }})
-      return await bot.sendMessage(chatId, 'Успешно выбрали класс!', botOptions)
+      return await bot.sendMessage(chatId, 'Успешно выбрали класс!', violationOptions)
     } else if (data === '/special') {
       const user = await User.findOne({ where: { chatId } })
       const violation = await Violation.findAll({ where: { userId: user.id }, order: ['id'] })
       await Violation.update({ garbageClassId: 2 }, { where: { userId: user.id, id: violation[violation.length - 1].id }})
-      return await bot.sendMessage(chatId, 'Успешно выбрали класс!', botOptions)
+      return await bot.sendMessage(chatId, 'Успешно выбрали класс!', violationOptions)
     } else if (data === '/industrial') {
       const user = await User.findOne({ where: { chatId } })
       const violation = await Violation.findAll({ where: { userId: user.id }, order: ['id'] })
       await Violation.update({ garbageClassId: 3 }, { where: { userId: user.id, id: violation[violation.length - 1].id }})
-      return await bot.sendMessage(chatId, 'Успешно выбрали класс!', botOptions)
+      return await bot.sendMessage(chatId, 'Успешно выбрали класс!', violationOptions)
     } else if (data === '/other') {
       const user = await User.findOne({ where: { chatId } })
       const violation = await Violation.findAll({ where: { userId: user.id }, order: ['id'] })
       await Violation.update({ garbageClassId: 4 }, { where: { userId: user.id, id: violation[violation.length - 1].id }})
-      return await bot.sendMessage(chatId, 'Успешно выбрали класс!', botOptions)
+      return await bot.sendMessage(chatId, 'Успешно выбрали класс!', violationOptions)
     } else {
       await bot.sendMessage(chatId, 'Я тебя не понимаю! Попробуй ещё раз!')
       return await bot.sendMessage(chatId, 'Выбирай команду:', botOptions)
