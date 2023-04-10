@@ -1,9 +1,5 @@
-const { botOptions, botLocation, violationOptions } = require('./options')
+const { botOptions, violationOptions } = require('./options')
 const { User, Violation } = require('./models/models')
-const axios = require('axios')
-const path = require('path')
-const fs = require('fs')
-const uuid = require('uuid')
 
 module.exports = bot => {
   bot.on('message', async msg => {
@@ -21,8 +17,6 @@ module.exports = bot => {
       await User.update({ chatId }, { where: { id: user.id, authToken: token } })
       return await bot.sendMessage(chatId, 'Успешная авторизация!', botOptions)
     }
-
-    return await bot.sendMessage(chatId, 'Выбирай команду:', botOptions)
   })
 
   bot.on('callback_query', async msg => {
@@ -71,11 +65,41 @@ module.exports = bot => {
       }
       await bot.sendMessage(chatId, 'Введите имя:')
       bot.on('message', async (msg) => {
-        console.log('msg: ', msg)
-        console.log('user.id: ', user.id)
-        console.log('violation[violation.length - 1].id: ', violation[violation.length - 1].id)
         await Violation.update({ name: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
         return await bot.sendMessage(chatId, 'Успешно задали имя!', violationOptions)
+      })
+    } else if (data === '/description') {
+      const user = await User.findOne({ where: { chatId } })
+      const violation = await Violation.findAll({ where: { userId: user.id }, order: ['id'] })
+      if (!violation.length > 0) {
+        return await bot.sendMessage(chatId, 'Ошибка! Нарушение не загружено!', botOptions)
+      }
+      if (violation[violation.length - 1].description) {
+        return await bot.sendMessage(chatId, 'Ошибка! Описание уже задано!', violationOptions)
+      }
+      await bot.sendMessage(chatId, 'Введите описание:')
+      bot.on('message', async (msg) => {
+        await Violation.update({ description: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
+        return await bot.sendMessage(chatId, 'Успешно задали описание!', violationOptions)
+      })
+    } else if (data === '/location') {
+      const user = await User.findOne({ where: { chatId } })
+      const violation = await Violation.findAll({ where: { userId: user.id }, order: ['id'] })
+      if (!violation.length > 0) {
+        return await bot.sendMessage(chatId, 'Ошибка! Нарушение не загружено!', botOptions)
+      }
+      if (violation[violation.length - 1].latitude || violation[violation.length - 1].longitude) {
+        return await bot.sendMessage(chatId, 'Ошибка! Геолокация уже задана!', violationOptions)
+      }
+      await bot.sendMessage(chatId, 'Добавьте геолокацию:')
+      bot.on('location', async (msg) => {
+        const chatId = msg.chat.id
+        await bot.sendMessage(chatId, `Твоя широта: ${ msg.location.latitude } и долгота: ${ msg.location.longitude }`)
+        await Violation.update({
+          latitude: msg.location.latitude,
+          longitude: msg.location.longitude
+        }, { where: { userId: user.id, id: violation[violation.length - 1].id }})
+        return await bot.sendMessage(chatId, 'Успешно задали геолокацию!', botOptions)
       })
     } else {
       await bot.sendMessage(chatId, 'Я тебя не понимаю! Попробуй ещё раз!')
@@ -83,15 +107,7 @@ module.exports = bot => {
     }
   })
 
-  bot.on('location', async (msg) => {
-    const chatId = msg.chat.id
-    console.log(msg.location.latitude)
-    console.log(msg.location.longitude)
-    return await bot.sendMessage(chatId, `Твоя широта: ${ msg.location.latitude } и долгота: ${ msg.location.longitude }`)
-  })
-
   const createViolation = async (chatId, url) => {
-    console.log('url:', url)
     await bot.sendMessage(chatId, 'Загрузили!')
     await bot.sendMessage(chatId, 'Нужно заполнить данные:', violationOptions)
   }

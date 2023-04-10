@@ -12,13 +12,13 @@ module.exports = {
         })
     },
 
-    botLocation: {
-        reply_markup: JSON.stringify({
-            inline_keyboard: [
-                [{text: 'Скинуть геолокацию', callback_data: '/location'}]
-            ]
-        })
-    },
+    // botLocation: {
+    //     reply_markup: JSON.stringify({
+    //         inline_keyboard: [
+    //             [{text: 'Скинуть геолокацию', callback_data: '/location'}]
+    //         ]
+    //     })
+    // },
 
     violationOptions: {
         reply_markup: JSON.stringify({
