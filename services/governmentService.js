@@ -44,7 +44,7 @@ class GovernmentService {
     })
     return violations.map(async violation => {
       const garbage = await GarbageClass.findOne({where: { id: violation.garbageClassId }})
-      return new ViolationsDto(violation, garbage)
+      return new ViolationsDto(...violation, ...garbage)
     })
   }
 
