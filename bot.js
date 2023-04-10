@@ -29,6 +29,8 @@ module.exports = bot => {
       return createViolation(chatId)
     }
 
+    console.log('msg: ', msg)
+
     if (msg.data === '/name') {
       console.log('msg: ', msg)
       await Violation.update({ name: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
