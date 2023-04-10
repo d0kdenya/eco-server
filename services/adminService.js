@@ -2,6 +2,8 @@ const ApiError = require("../exceptions/apiError");
 const {User, Government, Departments} = require("../models/models");
 const UserDto = require("../dtos/user-dto");
 const DepartmentsDto = require('../dtos/departmentsDto')
+const GovernmentProfileDto = require("../dtos/governmentProfileDto");
+const bcrypt = require("bcrypt");
 const dadata = require('dadata')(process.env.DADATA_API_KEY, process.env.DADATA_SECRET_KEY)
 
 class AdminService {
@@ -78,9 +80,25 @@ class AdminService {
     return new DepartmentsDto(department)
   }
 
-  async registerGovernment() {
-
-    return 1
+  async registerGovernment(government) {
+    if (!government){
+      throw ApiError.BadRequest('Некоректный объект government')
+    }
+    const hashPassword = await bcrypt.hash(government.password, 12)
+    return new GovernmentProfileDto (await Government.create({
+          email: government.email,
+          password: hashPassword,
+          lastname: government.lastname,
+          name: government.name,
+          patronymic: government.patronymic,
+          number: government.number,
+          sex: government.sex,
+          isActivated: true,
+          isVerified: true,
+          isBanned: false,
+          role: 'GOVERNMENT'
+        })
+    )
   }
 
   async banUser(id, isBanned) {
@@ -98,9 +116,19 @@ class AdminService {
     return await User.update({ isBanned }, {where: {id: id}})
   }
 
-  async banGovernment() {
+  async banGovernment(id , isBanned) {
+    if (!id) {
+      throw ApiError.BadRequest('Некорректный id!')
+    } else if (isBanned === null || isBanned === undefined) {
+      throw ApiError.BadRequest('Некорректное поле "isBanned"!')
+    }
 
-    return 1
+    const government = await Government.findOne({where: {id}})
+
+    if (!government) {
+      throw ApiError.BadRequest('Гос служащий не найден!')
+    }
+    return await Government.update({isBanned}, {where: {id: id}})
   }
 
   async createDepartment(department) {
@@ -183,9 +211,15 @@ class AdminService {
     return await User.destroy({where: {id}})
   }
 
-  async deleteGovernment() {
-
-    return 1
+  async deleteGovernment(governmentId) {
+    if (!governmentId) {
+      throw ApiError.BadRequest('Некорректный id гос служащего!')
+    }
+    const government = await Government.findOne({ where: { id: governmentId }})
+    if (!government) {
+      throw ApiError.BadRequest('Гос служащий не найден!')
+    }
+    return await Government.destroy({where: { id: governmentId }})
   }
 
   async deleteDepartment(departmentId) {

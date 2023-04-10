@@ -8,9 +8,12 @@ router.get('/', roleMiddleware(['GOVERNMENT', 'ADMIN']), authMiddleware, governm
 
 router.get('/getViolations', roleMiddleware(['GOVERNMENT', 'ADMIN']), authMiddleware, governmentController.getViolations)
 
+router.get('/garbageClasses', roleMiddleware(['GOVERNMENT', 'ADMIN']), authMiddleware, governmentController.getGarbageClasses)
+
 router.patch('/updateProfile', roleMiddleware(['GOVERNMENT', 'ADMIN']), authMiddleware, governmentController.updateProfile)
 
 router.post('/changeViolationStatus', roleMiddleware(['GOVERNMENT', 'ADMIN']), authMiddleware, governmentController.changeViolationStatus)
 
+router.post('/changeGarbageClass', roleMiddleware(['GOVERNMENT', 'ADMIN']), authMiddleware, governmentController.changeGarbageClass)
 
 module.exports = router

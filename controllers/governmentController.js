@@ -21,6 +21,16 @@ class GovernmentController {
     }
   }
 
+  async getGarbageClasses(req, res, next) {
+    try {
+      const { id } = req.user
+      const violations = await governmentService.getGarbageClasses(id)
+      return res.json(violations)
+    } catch (e) {
+      next(e)
+    }
+  }
+
   async updateProfile(req, res, next) {
     try {
       const {id} = req.user
@@ -37,6 +47,17 @@ class GovernmentController {
       const {id} = req.user
       const {violationId, status} = req.body
       const violation = await governmentService.changeViolationStatus(id, violationId, status)
+      return res.json(violation)
+    } catch (e) {
+      next(e)
+    }
+  }
+
+  async changeGarbageClass(req, res, next) {
+    try {
+      const { id } = req.user
+      const { violationId, isAcceptedClass } = req.body
+      const violation = await governmentService.changeGarbageClass(id, violationId, isAcceptedClass)
       return res.json(violation)
     } catch (e) {
       next(e)

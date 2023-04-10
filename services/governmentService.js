@@ -1,6 +1,6 @@
 const ApiError = require("../exceptions/apiError");
 const tokenService = require("./tokenService");
-const {User, Government, Violation, Departments} = require("../models/models");
+const {User, Government, Violation, Departments, GarbageClass} = require("../models/models");
 const UserDto = require("../dtos/user-dto");
 const ViolationsDto = require("../dtos/violationsDto")
 const GovernmentProfileDto = require("../dtos/governmentProfileDto")
@@ -47,6 +47,22 @@ class GovernmentService {
     })
   }
 
+  async getGarbageClasses(id) {
+    const government = await Government.findOne({where: {id}})
+
+    if (!government) {
+      throw ApiError.BadRequest('Гос служащий не найден!')
+    }
+    const classes = await GarbageClass.findAll()
+
+    return classes.map(garbage => {
+      return {
+        id: garbage.id,
+        name: garbage.name
+      }
+    })
+  }
+
   async updateProfile(id, government) {
     if (!id) {
       throw ApiError.BadRequest("Некорректный id")
@@ -84,6 +100,20 @@ class GovernmentService {
     }
 
     return await Violation.update({violationStatus: status}, {where: {id: violationId}})
+  }
+
+  async changeGarbageClass(id, violationId, isAcceptedClass) {
+    if (!violationId) {
+      throw ApiError.BadRequest('Некорректный id нарушения!')
+    } else if (!isAcceptedClass) {
+      throw ApiError.BadRequest('Некорректный статус!')
+    }
+    const violation = await Violation.findOne({where: {id: violationId}})
+
+    if (!violation) {
+      throw ApiError.BadRequest('Нарушение не найдено!')
+    }
+    return await Violation.update({ isAcceptedClass }, {where: {id: violationId}})
   }
 }
 

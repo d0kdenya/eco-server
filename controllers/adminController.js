@@ -110,8 +110,9 @@ class AdminController {
 
   async registerGovernment(req, res, next) {
     try {
-
-      return res.json()
+      const { government } = req.body
+      const newGovernment = adminService.registerGovernment(government)
+      return res.json(newGovernment)
     } catch (e) {
       next(e)
     }
@@ -130,8 +131,10 @@ class AdminController {
 
   async banGovernment(req, res, next) {
     try {
-
-      return res.json()
+      const {id} = req.params
+      const {isBanned} = req.body
+      const ban = await adminService.banGovernment(id, isBanned)
+      return res.json(ban)
     } catch (e) {
       next(e)
     }
@@ -189,8 +192,9 @@ class AdminController {
 
   async deleteGovernment(req, res, next) {
     try {
-
-      return res.json()
+      const { governmentId } = req.body
+      const government = await adminService.deleteGovernment(governmentId)
+      return res.json(government)
     } catch (e) {
       next(e)
     }

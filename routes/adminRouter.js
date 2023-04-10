@@ -10,11 +10,11 @@ router.get('/allDepartments', roleMiddleware(['ADMIN']), authMiddleware, adminCo
 router.get('/department/:id', roleMiddleware(['ADMIN']), authMiddleware, adminController.getDepartmentById)
 
 router.post('/activateGovernment', roleMiddleware(['ADMIN']), authMiddleware, adminController.activateGovernment)
-// router.post('/registerGovernment', roleMiddleware(['ADMIN']), authMiddleware, adminController.registerGovernment)
+router.post('/registerGovernment', roleMiddleware(['ADMIN']), authMiddleware, adminController.registerGovernment)
 
 router.post('/banUser/:id', roleMiddleware(['ADMIN']), authMiddleware, adminController.banUser)
 
-// router.post('/banGovernment', roleMiddleware(['ADMIN']), authMiddleware, adminController.banGovernment)
+router.post('/banGovernment', roleMiddleware(['ADMIN']), authMiddleware, adminController.banGovernment)
 router.post('/createDepartment', roleMiddleware(['ADMIN']), authMiddleware, adminController.createDepartment)
 router.post('/setDepartment', roleMiddleware(['ADMIN']), authMiddleware, adminController.setDepartment)
 router.post('/unsetDepartment', roleMiddleware(['ADMIN']), authMiddleware, adminController.unsetDepartment)
@@ -22,7 +22,7 @@ router.patch('/changeDepartment', roleMiddleware(['ADMIN']), authMiddleware, adm
 
 router.delete('/deleteUser/:id', roleMiddleware(['ADMIN']), authMiddleware, adminController.deleteUser)
 
-// router.delete('/deleteGovernment', roleMiddleware(['ADMIN']), authMiddleware, adminController.deleteGovernment)
+router.delete('/deleteGovernment', roleMiddleware(['ADMIN']), authMiddleware, adminController.deleteGovernment)
 router.delete('/deleteDepartment', roleMiddleware(['ADMIN']), authMiddleware, adminController.deleteDepartment)
 
 module.exports = router
