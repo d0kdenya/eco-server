@@ -61,12 +61,13 @@ module.exports = bot => {
       }
       if (violation[violation.length - 1].name) {
         return await bot.sendMessage(chatId, 'Ошибка! Имя уже задано!', violationOptions)
+      } else if (violation[violation.length - 1].description) {
+        return await bot.sendMessage(chatId, 'Ошибка! Описание уже задано!', violationOptions)
       }
       await bot.sendMessage(chatId, 'Введите имя и описание (Каждое с новой строчки):')
       bot.on('message', async msg => {
-        console.log('msg: ', msg)
-        await Violation.update({ name: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
-        return await bot.sendMessage(chatId, 'Успешно задали имя!', violationOptions)
+        await Violation.update({ name: msg.text.split('\n')[0], description: msg.text.split('\n')[1] }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
+        return await bot.sendMessage(chatId, 'Успешно задали имя и описание для нарушения!', violationOptions)
       })
     } else if (data === '/location') {
       const user = await User.findOne({ where: { chatId } })

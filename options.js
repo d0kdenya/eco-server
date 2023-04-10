@@ -23,7 +23,7 @@ module.exports = {
     violationOptions: {
         reply_markup: JSON.stringify({
             inline_keyboard: [
-                [{text: 'Ввести название нарушения', callback_data: '/name'}],
+                [{text: 'Ввести название и описание нарушения', callback_data: '/name'}],
                 [{text: 'Скинуть геолокацию', callback_data: '/location'}],
             ]
         })
