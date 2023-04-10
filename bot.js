@@ -47,6 +47,8 @@ module.exports = bot => {
     } else if (data === '/upload') {
       await bot.sendMessage(chatId, 'Для начала загрузи свой файлик!')
       bot.on('message', async (msg) => {
+        if (!msg?.photo) return
+
         const image = msg.photo[msg.photo.length - 1].file_id ? await bot.getFile(msg.photo[msg.photo.length - 1].file_id) : ''
 
         if (!image) {
