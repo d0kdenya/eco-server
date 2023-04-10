@@ -76,7 +76,10 @@ module.exports = bot => {
         return await bot.sendMessage(chatId, 'Ошибка! Имя уже задано!', violationOptions)
       }
       await bot.sendMessage(chatId, 'Введите имя:')
-      return bot.on('message', async msg => msg)
+      bot.on('message', async msg => {
+        await Violation.update({ name: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
+        return await bot.sendMessage(chatId, 'Успешно задали имя!', violationOptions)
+      })
     } else if (data === '/description') {
       const user = await User.findOne({ where: { chatId } })
       const violation = await Violation.findAll({ where: { userId: user.id }, order: ['id'] })
