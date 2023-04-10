@@ -173,7 +173,7 @@ const Violation = sequelize.define('violations', {
     autoIncrement: true
   },
   file: {
-    type: DataTypes.ARRAY(DataTypes.STRING)
+    type: DataTypes.STRING
   },
   name: {
     type: DataTypes.STRING

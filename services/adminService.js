@@ -95,7 +95,7 @@ class AdminService {
     if (!user) {
       throw ApiError.BadRequest('Пользователь не найден!')
     }
-    return await User.update({isBanned}, {where: {id: id}})
+    return await User.update({ isBanned }, {where: {id: id}})
   }
 
   async banGovernment() {
