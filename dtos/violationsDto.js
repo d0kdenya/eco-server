@@ -10,7 +10,9 @@ module.exports = class ViolationsDto {
 
 
   constructor(...model) {
-    console.log('model[0]: ', model[0])
+    console.log('model[0]: ', model[0].violations)
+    console.log('model[0]: ', model[0].dataValues)
+    console.log('model[0]: ', model[0].violations.dataValues)
     console.log('model[1]: ', model[1])
     this.id = model[0].id
     this.name = model[0].name
