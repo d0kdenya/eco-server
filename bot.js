@@ -54,7 +54,7 @@ module.exports = bot => {
           return await bot.sendMessage(chatId, 'Ошибка загрузки изображения!', botOptions)
         }
         console.log('image: ', image)
-        const user = await User.findOne({ where: { chatId } })
+        const user = await User.findOne({ where: { chatId: Number(chatId) } })
         console.log('user: ', user)
         await Violation.create({ file: `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}/${image.file_path}`, userId: user.id })
         return createViolation(chatId)
