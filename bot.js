@@ -40,8 +40,7 @@ module.exports = bot => {
       return await bot.sendMessage(chatId, `Для регистрации перейди по ссылке ${ process.env.CLIENT_URL }register/`)
     } else if (data === '/upload') {
       await bot.sendMessage(chatId, 'Для начала загрузи свой файлик!')
-      console.log('msg upload: ', msg)
-      bot.on('message ', async (msg) => {
+      bot.on('message', async (msg) => {
         if (!msg?.photo) return
 
         const image = msg.photo[msg.photo.length - 1].file_id ? await bot.getFile(msg.photo[msg.photo.length - 1].file_id) : ''
@@ -65,7 +64,6 @@ module.exports = bot => {
         return await bot.sendMessage(chatId, 'Ошибка! Имя уже задано!', violationOptions)
       }
       await bot.sendMessage(chatId, 'Введите имя:')
-      console.log('msg name: ', msg)
       bot.on('message', async (msg) => {
         await Violation.update({ name: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
         return await bot.sendMessage(chatId, 'Успешно задали имя!', violationOptions)
@@ -80,7 +78,6 @@ module.exports = bot => {
         return await bot.sendMessage(chatId, 'Ошибка! Описание уже задано!', violationOptions)
       }
       await bot.sendMessage(chatId, 'Введите описание:')
-      console.log('msg description: ', msg)
       bot.on('message', async (msg) => {
         await Violation.update({ description: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
         return await bot.sendMessage(chatId, 'Успешно задали описание!', violationOptions)
