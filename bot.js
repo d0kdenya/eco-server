@@ -6,7 +6,9 @@ module.exports = bot => {
     const text = msg.text
     const chatId = msg.chat.id
 
-    if (text && text.length > 7 && text.split(' ')[0] === '/start') {
+    if (text === '/start') {
+
+    } else if (text && text.length > 7 && (text.split(' ')[0] === '/start')) {
       const token = text.split(' ')[1]
 
       const user = await User.findOne({ where: { authToken: token } })
