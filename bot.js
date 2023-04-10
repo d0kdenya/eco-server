@@ -70,8 +70,8 @@ module.exports = bot => {
       }
       bot.on('message', async (msg) => {
         await Violation.update({ name: msg }, { where: { userId: user.id } })
+        return await bot.sendMessage(chatId, 'Успешно задали имя!:', violationOptions)
       })
-      return await bot.sendMessage(chatId, 'Успешно задали имя!:', violationOptions)
     } else {
       await bot.sendMessage(chatId, 'Я тебя не понимаю! Попробуй ещё раз!')
       return await bot.sendMessage(chatId, 'Выбирай команду:', botOptions)
