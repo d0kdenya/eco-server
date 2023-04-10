@@ -69,7 +69,6 @@ module.exports = bot => {
       bot.on('message', async msg => {
         if (msg?.location) return
         await Violation.update({ name: msg.text.split('\n')[0], description: msg.text.split('\n')[1] }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
-        violationOptions.reply_markup[0].shift()
         return await bot.sendMessage(chatId, 'Успешно задали имя и описание для нарушения!', violationOptions)
       })
     } else if (data === '/location') {
