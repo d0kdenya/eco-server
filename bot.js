@@ -28,19 +28,6 @@ module.exports = bot => {
       await Violation.create({ file: `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}/${image.file_path}`, userId: user.id })
       return createViolation(chatId)
     }
-
-    console.log('msg: ', msg)
-
-    if (msg.data === '/name') {
-      console.log('msg: ', msg)
-      await Violation.update({ name: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
-      return await bot.sendMessage(chatId, 'Успешно задали имя!', violationOptions)
-    }
-
-    if (msg.data === '/description') {
-      await Violation.update({ description: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
-      return await bot.sendMessage(chatId, 'Успешно задали описание!', violationOptions)
-    }
   })
 
   bot.on('callback_query', async msg => {
@@ -75,24 +62,11 @@ module.exports = bot => {
       if (violation[violation.length - 1].name) {
         return await bot.sendMessage(chatId, 'Ошибка! Имя уже задано!', violationOptions)
       }
-      await bot.sendMessage(chatId, 'Введите имя:')
+      await bot.sendMessage(chatId, 'Введите имя и описание (Каждое с новой строчки):')
       bot.on('message', async msg => {
+        console.log('msg: ', msg)
         await Violation.update({ name: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
         return await bot.sendMessage(chatId, 'Успешно задали имя!', violationOptions)
-      })
-    } else if (data === '/description') {
-      const user = await User.findOne({ where: { chatId } })
-      const violation = await Violation.findAll({ where: { userId: user.id }, order: ['id'] })
-      if (!violation.length > 0) {
-        return await bot.sendMessage(chatId, 'Ошибка! Нарушение не загружено!', botOptions)
-      }
-      if (violation[violation.length - 1].description) {
-        return await bot.sendMessage(chatId, 'Ошибка! Описание уже задано!', violationOptions)
-      }
-      await bot.sendMessage(chatId, 'Введите описание:')
-      bot.on('message', async msg => {
-        await Violation.update({ description: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
-        return await bot.sendMessage(chatId, 'Успешно задали описание!', violationOptions)
       })
     } else if (data === '/location') {
       const user = await User.findOne({ where: { chatId } })

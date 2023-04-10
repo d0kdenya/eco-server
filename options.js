@@ -24,7 +24,6 @@ module.exports = {
         reply_markup: JSON.stringify({
             inline_keyboard: [
                 [{text: 'Ввести название нарушения', callback_data: '/name'}],
-                [{text: 'Ввести описание нарушения', callback_data: '/description'}],
                 [{text: 'Скинуть геолокацию', callback_data: '/location'}],
             ]
         })
