@@ -60,8 +60,9 @@ module.exports = bot => {
       return await bot.sendMessage(chatId, 'Выбирай команду:', botOptions)
     } else if (data === '/name') {
       const user = await User.findOne({ where: { chatId } })
+      console.log('user: ', user)
       const violation = await Violation.findAll({ where: { userId: user.id }, order: ['id'] })
-
+      console.log('violation: ', violation)
       if (!violation.length > 0) {
         return await bot.sendMessage(chatId, 'Ошибка! Нарушение не загружено!', botOptions)
       }
@@ -69,6 +70,7 @@ module.exports = bot => {
         return await bot.sendMessage(chatId, 'Ошибка! Имя уже задано!', violationOptions)
       }
       bot.on('message', async (msg) => {
+        console.log('msg: ', msg)
         await Violation.update({ name: msg }, { where: { userId: user.id } })
         return await bot.sendMessage(chatId, 'Успешно задали имя!:', violationOptions)
       })
