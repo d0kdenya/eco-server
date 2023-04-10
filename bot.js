@@ -47,7 +47,9 @@ module.exports = bot => {
     } else if (data === '/upload') {
       await bot.sendMessage(chatId, 'Для начала загрузи свой файлик!')
       bot.on('message', async (msg) => {
+        console.log('msg: ', msg)
         const image = await bot.getFile(msg.photo[3].file_id)
+        console.log('image: ', image)
         const user = await User.findOne({ where: { chatId } })
         await Violation.create({ file: `https://api.telegram.org/file/bot${process.env.BOT_TOKEN}/${image.file_path}`, userId: user.id })
         return createViolation(chatId)
