@@ -3,6 +3,8 @@ const { User, Violation } = require('./models/models')
 
 module.exports = bot => {
   bot.on('message', async msg => {
+    console.log('msg: ', msg)
+
     const text = msg.text
     const chatId = msg.chat.id
 
@@ -22,6 +24,8 @@ module.exports = bot => {
   bot.on('callback_query', async msg => {
     const data = msg.data
     const chatId = msg.message.chat.id
+
+    console.log('msg: ', msg)
 
     if (data === '/start') {
       await bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/6da/2f4/6da2f40d-a9d2-41a1-8f33-b816439ffe73/192/12.webp')
