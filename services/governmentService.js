@@ -48,10 +48,8 @@ class GovernmentService {
       garbage.push(await GarbageClass.findOne({where: { id: violation.garbageClassId }}))
     }
 
-    return violations.map(violation => {
-      const result = new ViolationsDto(violation, garbage)
-      console.log('result: ', result)
-      return result
+    return violations.map((violation, iter) => {
+      return new ViolationsDto(violation, garbage[iter])
     })
   }
 
