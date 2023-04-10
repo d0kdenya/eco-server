@@ -30,6 +30,7 @@ module.exports = bot => {
     }
 
     if (msg.data === '/name') {
+      console.log('msg: ', msg)
       await Violation.update({ name: msg.text }, { where: { userId: user.id, id: violation[violation.length - 1].id } })
       return await bot.sendMessage(chatId, 'Успешно задали имя!', violationOptions)
     }
