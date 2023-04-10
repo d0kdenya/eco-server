@@ -5,17 +5,22 @@ module.exports = class ViolationsDto {
   latitude
   longitude
   violationStatus
+  garbageClass
 
 
-  constructor(model) {
-    this.id = model.id
-    this.name = model.name
-    this.description = model.description
-    this.latitude = model.latitude
-    this.longitude = model.longitude
-    this.violationStatus = model.violationStatus
-    if (model?.file) {
-      this.file = this.#createFileObj(model.file)
+  constructor(...model) {
+    this.id = model[0].id
+    this.name = model[0].name
+    this.description = model[0].description
+    this.latitude = model[0].latitude
+    this.longitude = model[0].longitude
+    this.violationStatus = model[0].violationStatus
+    if (model[0]?.file) {
+      this.file = this.#createFileObj(model[0].file)
+    }
+    this.garbageClass = {
+      garbageClassId: model[1].garbageClassId,
+      garbageClassName: model[1].garbageClassName
     }
   }
 
