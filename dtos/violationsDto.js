@@ -10,21 +10,17 @@ module.exports = class ViolationsDto {
 
 
   constructor(...model) {
-    console.log('model[0]: ', model[0].violations)
-    console.log('model[0]: ', model[0].dataValues)
-    console.log('model[0]: ', model[0].violations.dataValues)
-    console.log('model[1]: ', model[1])
-    this.id = model[0].id
-    this.name = model[0].name
-    this.description = model[0].description
-    this.latitude = model[0].latitude
-    this.longitude = model[0].longitude
-    this.violationStatus = model[0].violationStatus
-    this.isAcceptedClass = model[0].isAcceptedClass
-    this.file = model[0]?.file
+    this.id = model[0].dataValues.id
+    this.name = model[0].dataValues.name
+    this.description = model[0].dataValues.description
+    this.latitude = model[0].dataValues.latitude
+    this.longitude = model[0].dataValues.longitude
+    this.violationStatus = model[0].dataValues.violationStatus
+    this.isAcceptedClass = model[0].dataValues.isAcceptedClass
+    this.file = model[0].dataValues?.file
     this.garbageClass = {
-      garbageClassId: model[1].garbageClassId,
-      garbageClassName: model[1].garbageClassName
+      garbageClassId: model[1].dataValues.garbageClassId,
+      garbageClassName: model[1].dataValues.garbageClassName
     }
   }
 }
